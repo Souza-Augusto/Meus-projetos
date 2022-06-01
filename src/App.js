@@ -15,6 +15,20 @@ export default function app() {
   const [mudarCor, setMudarCor] = useState(false);
 
   function calcular(button) {
+    if (
+      resultado === "Operação inválida." &&
+      (button !== "." ||
+        button !== "=" ||
+        button !== "+" ||
+        button !== "-" ||
+        button !== "x" ||
+        button !== "÷")
+    ) {
+      setResultado(button);
+      setParteResultado([]);
+      return;
+    }
+
     if (button === "c") {
       setResultado("0");
       setParteResultado([]);
@@ -46,7 +60,15 @@ export default function app() {
         ) {
           prevAux = prevAux.slice(0, -1);
         }
-        return [eval(prevAux.join(""))];
+
+        try {
+          prevAux = [eval(prevAux.join(""))];
+        } catch (error) {
+          setResultado("Operação inválida.");
+          setParteResultado([]);
+          console.log(error);
+        }
+        return prevAux;
       });
       setResultado("");
       return;
